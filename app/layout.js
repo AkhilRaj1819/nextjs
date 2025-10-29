@@ -21,11 +21,15 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  await connectToDatabase()
-    .then(() => console.log('✅ MongoDB connection established'))
-    .catch((err) => console.error('❌ MongoDB connection failed:', err));
-
-  console.log('✅ User model loaded successfully:', !!User);
+  try {
+    const connection = await connectToDatabase();
+    if (connection) {
+      console.log('✅ MongoDB connection established');
+      console.log('✅ User model loaded successfully:', !!User);
+    }
+  } catch (err) {
+    console.error('❌ MongoDB connection failed:', err);
+  }
 
   return (
     <html lang="en">
