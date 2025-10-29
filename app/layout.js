@@ -1,5 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import connectToDatabase from '../utils/mongodb';
+import User from './models/User';
+import SessionProvider from './components/SessionProvider';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,13 +20,45 @@ export const metadata = {
   description: "Learning Management System built with Next.js",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  await connectToDatabase()
+    .then(() => console.log('✅ MongoDB connection established'))
+    .catch((err) => console.error('❌ MongoDB connection failed:', err));
+
+  console.log('✅ User model loaded successfully:', !!User);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SessionProvider>
+          {children}
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+              success: {
+                duration: 3000,
+                iconTheme: {
+                  primary: '#4ade80',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                duration: 4000,
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
+        </SessionProvider>
       </body>
     </html>
   );
