@@ -1,5 +1,6 @@
-import Navbar from '../components/layout/Navbar';
-import LoginForm from '../components/forms/LoginForm';
+import Navbar from '../components/layout/navbar';
+import InputField from '../components/global/input-field';
+import Button from '../components/global/button';
 
 export default function LoginPage() {
   return (
@@ -17,7 +18,21 @@ export default function LoginPage() {
               </p>
             </div>
             
-            <LoginForm />
+            <form className="space-y-6">
+              <InputField
+                label="Email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+              />
+              <InputField
+                label="Password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+              />
+              <Button type="submit">Sign In</Button>
+            </form>
             
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
