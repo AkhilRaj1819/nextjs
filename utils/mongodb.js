@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  console.warn('MONGODB_URI not found - database connection will be skipped during build');
 }
 
 let cached = global.mongoose;
@@ -13,6 +13,11 @@ if (!cached) {
 }
 
 async function connectToDatabase() {
+  if (!MONGODB_URI) {
+    console.warn('Skipping database connection - MONGODB_URI not available');
+    return null;
+  }
+
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
